@@ -25,27 +25,7 @@ with pdfplumber.open(file_path) as pdf:
 
 # %%
 #PDFPLUMBER not working
-with pdfplumber.open(file_path) as pdf:
-    all_tables = []
-    for page_num, page in enumerate(pdf.pages, start=1):
-        tables = page.extract_tables()
-        for table_num, table in enumerate(tables, start=1):
-            if table:
-                df = pd.DataFrame(table[1:], columns=table[0])
-                all_tables.append((page_num, table_num, df))
-print(file_path)
-print(all_tables)
-
-# Combine all tables into one Excel file
-
-# Save each table as a separate CSV file
-for page_num, table_num, df in all_tables:
-    file_name = f"page{page_num}_table{table_num}.csv"
-    print(file_name)
-    output_file = os.path.join(folder_path, file_name)
-    df.to_csv(output_file, index=False)
-    print(f"file saved in {output_file}")
-
+#removed PDFPLUMBER since it was not working
 # %%
 #CAMELOT NOT WORKING
 #deleted CAMELOT since it was not working
