@@ -48,18 +48,8 @@ for page_num, table_num, df in all_tables:
 
 # %%
 #CAMELOT NOT WORKING
-import camelot
+#deleted CAMELOT since it was not working
 
-file_name = "camelot_output.csv"
-output_file = os.path.join(folder_path, file_name)
-tables = camelot.read_pdf(file_path, pages="all")
-print(tables)
-tables.export(output_file, f="csv", compress=False)
-print(output_file)
-
-
-
-# %%
 import tabula
 import os
 
