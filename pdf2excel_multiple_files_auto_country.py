@@ -130,13 +130,23 @@ def main():
         combined_df_pivot = combined_df_pivot.reset_index()
         combined_df_groupby = combined_df.groupby(["Account", "source_file"])["Total"].sum().unstack(fill_value=0)
         combined_df_groupby = combined_df_groupby.reset_index()
+        
+        #Custom sort 
+        sort_list = [ 'Product sales (non-FBA)','Product sale refunds (non-FBA)','FBA product sales','FBA product sale refunds','FBA inventory credit','FBA liquidation proceeds','Shipping credits','Shipping credit refunds','Gift wrap credits','Gift wrap credit refunds','Promotional rebates','Promotional rebate refunds','A-to-z Guarantee claims','Chargebacks','Amazon Shipping Reimbursement Adjustments','SAFE-T reimbursement','Seller fulfilled selling fees','FBA selling fees','Selling fee refunds','FBA transaction fees','FBA transaction fee refunds','Other transaction fees','Other transaction fee refunds','FBA inventory and inbound services fees','Shipping label purchases','Shipping label refunds','Carrier shipping label adjustments','Service fees','Refund administration fees','Adjustments','Cost of Advertising','Refund for Advertiser','Miscellaneous COGS']
+        account_list_all = combined_df_groupby['Account'].unique()
+        sort_list_complete = list(sort_list) + [acc for acc in account_list_all if acc not in sort_list]
 
+        combined_df_groupby["Account"] = pd.Categorical(combined_df_groupby["Account"],
+                                                        categories=sort_list_complete,
+                                                        ordered=True)
+        combined_df_groupby = combined_df_groupby.sort_values(['Account'])
     except Exception as e:
         print(f"Error during pivoting: {e}")
     finally:
         print(combined_df_pivot)
 
     
+
     #save combined df to one csv
     output_file1 = os.path.join(folder_path, "combined_payment_reports.csv")
     output_file2 = os.path.join(folder_path, "combined_payment_reports_pivot.csv")
@@ -144,6 +154,7 @@ def main():
     combined_df.to_csv(output_file1, index=False)
     combined_df_pivot.to_csv(output_file2, index=False)
     combined_df_groupby.to_csv(output_file3, index=False)
+
     
 
 main()

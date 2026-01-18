@@ -71,7 +71,27 @@ def main():
         
         old_pl_unpivot["Month"] = pd.to_datetime(old_pl_unpivot["Month"], format="%Y-%m-%d %H:%M:%S").dt.strftime("%B-%Y")
         old_pl_unpivot["SortKey"] = range(len(old_pl_unpivot))
+
+        account_and_type = pd.DataFrame(columns=["account name", "type"])
+        #get account type from working PL
+        try:
+            account_types = {
+                "revenue" : "D8:D57",
+                "revenue_adj" : "D75:D102",
+                "cogs" : "D117:D141",
+                "cogs_others" : "D147:D182",
+                "expenses_media" : "D189:D213",
+                "expenes_general" : "D218:D283",
+                "expenses_staffing" : "D286:D309"
+            }
+            
+
+        except Exception as e:
+            print(f"Error in getting account type: {e}")
         
+        for item in account_types.values:
+            accounts = wb1.sheets['3. Working P&L'].range(item)
+        print(accounts)
         #show the amounts that are not null and not zero
         #print(old_pl_unpivot[old_pl_unpivot['Amount'].notnull() & old_pl_unpivot['Amount']!=0])
         
@@ -115,6 +135,7 @@ def main():
         new_pl_unpivot["Month"] = pd.to_datetime(new_pl_unpivot["Month"], format="%B %Y").dt.strftime("%B-%Y")
         new_pl_unpivot["SortKey"] = range(len(new_pl_unpivot))
 
+    
     except Exception as e:
         print(f"Error opening new PL file: {e}")
     finally:
