@@ -1,4 +1,4 @@
-# Test Repository
+# PDF to excel converter
 
 This repository contains Python scripts and Jupyter notebooks for PDF to Excel conversion and file system comparison tasks.
 
